@@ -117,14 +117,15 @@
             width: 40px;
             height: 40px;
             margin-right: 12px;
-            background: var(--primary);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
-            font-weight: 700;
-            font-size: 1.25rem;
+        }
+
+        .sidebar-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .sidebar-brand-text {
@@ -170,6 +171,7 @@
             margin-left: 280px;
             background: var(--light-bg);
             min-height: 100vh;
+            transition: var(--transition);
         }
 
         /* Top Navigation */
@@ -183,6 +185,12 @@
             position: sticky;
             top: 0;
             z-index: 99;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .nav-search {
@@ -342,6 +350,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         /* Stats Grid */
@@ -418,6 +428,8 @@
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--light-gray);
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .card-title {
@@ -429,11 +441,13 @@
         /* Tables */
         .table-responsive {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 600px;
         }
 
         .data-table th, .data-table td {
@@ -494,6 +508,7 @@
             cursor: pointer;
             font-size: 0.9rem;
             gap: 0.5rem;
+            white-space: nowrap;
         }
 
         .btn-primary {
@@ -537,6 +552,8 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+            flex: 1;
+            min-width: 150px;
         }
 
         .filter-group label {
@@ -648,6 +665,8 @@
             display: flex;
             border-bottom: 1px solid var(--light-gray);
             margin-bottom: 1.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .tab {
@@ -657,6 +676,7 @@
             color: var(--gray);
             transition: var(--transition);
             border-bottom: 2px solid transparent;
+            white-space: nowrap;
         }
 
         .tab.active {
@@ -707,6 +727,7 @@
             border: none;
             cursor: pointer;
             padding: 0.5rem;
+            z-index: 101;
         }
 
         .mobile-menu-btn span {
@@ -716,6 +737,34 @@
             margin: 3px 0;
             transition: var(--transition);
             border-radius: 2px;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile Overlay */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 98;
+        }
+
+        .mobile-overlay.active {
+            display: block;
         }
 
         /* Responsive */
@@ -732,6 +781,7 @@
         @media (max-width: 992px) {
             .sidebar {
                 transform: translateX(-100%);
+                width: 280px;
             }
             
             .sidebar.active {
@@ -748,6 +798,14 @@
             
             .nav-search {
                 width: 300px;
+            }
+
+            .mobile-overlay.active {
+                display: block;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr !important;
             }
         }
 
@@ -771,15 +829,33 @@
             .filter-group {
                 width: 100%;
             }
+
+            .nav-search {
+                display: none;
+            }
+
+            .dropdown-content {
+                position: fixed;
+                top: 70px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                max-width: 400px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dashboard-content {
+                padding: 1rem;
+            }
         }
 
         @media (max-width: 576px) {
             .dashboard-content {
                 padding: 1rem;
-            }
-            
-            .nav-search {
-                display: none;
             }
             
             .page-header {
@@ -791,15 +867,71 @@
             .user-profile .user-name {
                 display: none;
             }
+
+            .top-nav {
+                padding: 1rem;
+            }
+
+            .nav-actions {
+                gap: 1rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .content-card {
+                padding: 1rem;
+            }
+
+            .stat-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stat-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-brand {
+                padding: 0 1rem 1.5rem;
+            }
+
+            .sidebar-link {
+                padding: 0.75rem 1rem;
+            }
+
+            .sidebar-link i {
+                margin-right: 0.75rem;
+            }
+
+            .dropdown-content {
+                width: 95%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay"></div>
+
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <div class="sidebar-logo">P</div>
+                <div class="sidebar-logo">
+                    <!-- Replace with your logo image -->
+                    <img src="assets/Manify.png" alt="ProcureHub Logo">
+                </div>
                 <div class="sidebar-brand-text">ProcureHub</div>
             </div>
             <ul class="sidebar-menu">
@@ -852,14 +984,16 @@
         <main class="main-content">
             <!-- Top Navigation -->
             <nav class="top-nav">
-                <button class="mobile-menu-btn">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <div class="nav-search">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search products, suppliers, RFQs...">
+                <div class="nav-left">
+                    <button class="mobile-menu-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="nav-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search products, suppliers, RFQs...">
+                    </div>
                 </div>
                 <div class="nav-actions">
                     <div class="nav-action-item dropdown" id="notificationDropdown">
@@ -1917,7 +2051,15 @@
         // Mobile Menu Toggle
         document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
             document.querySelector('.sidebar').classList.toggle('active');
+            document.querySelector('.mobile-overlay').classList.toggle('active');
             this.classList.toggle('active');
+        });
+
+        // Close sidebar when clicking on overlay
+        document.querySelector('.mobile-overlay').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.remove('active');
+            document.querySelector('.mobile-menu-btn').classList.remove('active');
+            this.classList.remove('active');
         });
 
         // Sidebar Navigation
@@ -1941,6 +2083,13 @@
                 // Show the target section
                 const targetId = this.getAttribute('href').substring(1);
                 document.getElementById(targetId).style.display = 'block';
+                
+                // Close sidebar on mobile after navigation
+                if (window.innerWidth <= 992) {
+                    document.querySelector('.sidebar').classList.remove('active');
+                    document.querySelector('.mobile-menu-btn').classList.remove('active');
+                    document.querySelector('.mobile-overlay').classList.remove('active');
+                }
             });
         });
 
@@ -1992,19 +2141,15 @@
             });
         });
 
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(e) {
-            const sidebar = document.querySelector('.sidebar');
-            const mobileBtn = document.querySelector('.mobile-menu-btn');
-            
-            if (window.innerWidth <= 992 && 
-                !sidebar.contains(e.target) && 
-                !mobileBtn.contains(e.target) && 
-                sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-                mobileBtn.classList.remove('active');
-            }
-        });
+        // Function to replace logo with your image
+        function setLogo(imageUrl) {
+            const logoElement = document.querySelector('.sidebar-logo img');
+            logoElement.src = imageUrl;
+            logoElement.alt = 'Your Company Logo';
+        }
+
+        // Example usage - replace with your actual logo URL
+        // setLogo('path/to/your/logo.png');
     </script>
 </body>
 </html>

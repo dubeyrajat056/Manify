@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProcureHub | Company Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Productly Color Scheme */
+        :root {
+            --primary: #4A3AFF;
+            --primary-light: #6C5CE7;
+            --primary-dark: #3A2BD6;
+            --secondary: #FF6B6B;
+            --accent: #00C9A7;
+            --accent-light: #2EE6C3;
+            --dark: #2D3436;
+            --dark-light: #4A4A4A;
+            --gray: #636E72;
+            --gray-light: #A0A0A0;
+            --light-gray: #DFE6E9;
+            --white: #FFFFFF;
+            --light-bg: #F8F9FA;
+            --section-bg: #F7F9FC;
+            
+            --border-radius: 12px;
+            --border-radius-lg: 20px;
+            --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --box-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.7;
+            color: var(--dark);
+            overflow-x: hidden;
+            background: var(--white);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            font-weight: 400;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .sidebar-brand-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .sidebar-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .sidebar-link i {
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: var(--light-bg);
+            min-height: 100vh;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: var(--white);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .nav-search {
+            display: flex;
+            align-items: center;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            padding: 0.5rem 1rem;
+            width: 400px;
+        }
+
+        .nav-search input {
+            border: none;
+            background: transparent;
+            padding: 0.5rem;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-action-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* Dropdown Menus */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: var(--white);
+            min-width: 280px;
+            box-shadow: var(--box-shadow-lg);
+            border-radius: var(--border-radius);
+            z-index: 1000;
+            margin-top: 0.5rem;
+            padding: 1rem 0;
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+
+        .notification-item, .profile-item {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .notification-item:hover, .profile-item:hover {
+            background: var(--light-bg);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .notification-info h4, .profile-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-info p, .profile-info p {
+            font-size: 0.8rem;
+            margin: 0;
+            color: var(--gray);
+        }
+
+        .notification-time {
+            font-size: 0.7rem;
+            color: var(--gray-light);
+        }
+
+        .dropdown-header {
+            padding: 0 1.5rem 0.75rem;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-header h3 {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .view-all {
+            font-size: 0.8rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-lg);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            color: var(--white);
+        }
+
+        .stat-icon.primary {
+            background: var(--primary);
+        }
+
+        .stat-icon.accent {
+            background: var(--accent);
+        }
+
+        .stat-icon.secondary {
+            background: var(--secondary);
+        }
+
+        .stat-info h3 {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-info p {
+            margin: 0;
+            color: var(--gray-light);
+            font-size: 0.9rem;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--dark);
+            background: var(--light-bg);
+        }
+
+        .data-table tr:hover {
+            background: var(--light-bg);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        .status-approved {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .status-rejected {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .status-processing {
+            background: rgba(0, 123, 255, 0.1);
+            color: #007bff;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(74, 58, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(74, 58, 255, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .filter-select, .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .filter-select:focus, .filter-input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Product Grid */
+        .products-grid, .categories-grid, .suppliers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card, .category-card, .supplier-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .product-card:hover, .category-card:hover, .supplier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-lg);
+        }
+
+        .product-image, .category-image, .supplier-image {
+            height: 180px;
+            background: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-light);
+            font-size: 3rem;
+        }
+
+        .product-info, .category-info, .supplier-info {
+            padding: 1.5rem;
+        }
+
+        .product-title, .category-title, .supplier-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-supplier, .category-count, .supplier-location {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 58, 255, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* FAQ */
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            background: var(--light-bg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .faq-answer {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 2px;
+            background: var(--dark);
+            margin: 3px 0;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .nav-search {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-search {
+                width: 200px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-grid, .categories-grid, .suppliers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .dashboard-content {
+                padding: 1rem;
+            }
+            
+            .nav-search {
+                display: none;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .user-profile .user-name {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-logo">P</div>
+                <div class="sidebar-brand-text">ProcureHub</div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="#dashboard" class="sidebar-link active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#marketplace" class="sidebar-link">
+                        <i class="fas fa-store"></i>
+                        <span>Marketplace</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#categories" class="sidebar-link">
+                        <i class="fas fa-th-large"></i>
+                        <span>Categories</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#suppliers" class="sidebar-link">
+                        <i class="fas fa-address-book"></i>
+                        <span>Suppliers Directory</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#rfq" class="sidebar-link">
+                        <i class="fas fa-file-contract"></i>
+                        <span>RFQ / Tender</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#orders" class="sidebar-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders / Transactions</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#support" class="sidebar-link">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help / Support</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <nav class="top-nav">
+                <button class="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="nav-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search products, suppliers, RFQs...">
+                </div>
+                <div class="nav-actions">
+                    <div class="nav-action-item dropdown" id="notificationDropdown">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">5</span>
+                        <div class="dropdown-content">
+                            <div class="dropdown-header">
+                                <h3>Notifications</h3>
+                                <a href="#" class="view-all">View All</a>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <i class="fas fa-gavel"></i>
+                                </div>
+                                <div class="notification-info">
+                                    <h4>New Bid Received</h4>
+                                    <p>Supplier TechParts Corp submitted a bid for your RFQ</p>
+                                    <div class="notification-time">10 min ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <i class="fas fa-shipping-fast"></i>
+                                </div>
+                                <div class="notification-info">
+                                    <h4>Order Shipped</h4>
+                                    <p>Your order #ORD-7839 has been shipped</p>
+                                    <div class="notification-time">2 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon">
+                                    <i class="fas fa-file-invoice"></i>
+                                </div>
+                                <div class="notification-info">
+                                    <h4>Invoice Ready</h4>
+                                    <p>Invoice for order #ORD-7842 is available</p>
+                                    <div class="notification-time">1 day ago</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-action-item dropdown" id="profileDropdown">
+                        <div class="user-profile">
+                            <div class="user-avatar">JD</div>
+                            <div class="user-name">John Doe</div>
+                            <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <div class="profile-item">
+                                <i class="fas fa-user"></i>
+                                <div class="profile-info">
+                                    <h4>My Profile</h4>
+                                    <p>View and edit your profile</p>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fas fa-cog"></i>
+                                <div class="profile-info">
+                                    <h4>Account Settings</h4>
+                                    <p>Manage your account preferences</p>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fas fa-building"></i>
+                                <div class="profile-info">
+                                    <h4>Company Details</h4>
+                                    <p>Update company information</p>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fas fa-credit-card"></i>
+                                <div class="profile-info">
+                                    <h4>Payment Methods</h4>
+                                    <p>Manage payment options</p>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fas fa-users"></i>
+                                <div class="profile-info">
+                                    <h4>Team Management</h4>
+                                    <p>Manage team members</p>
+                                </div>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <div class="profile-info">
+                                    <h4>Logout</h4>
+                                    <p>Sign out from your account</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Dashboard Overview -->
+                <section id="dashboard" class="content-section active">
+                    <div class="page-header">
+                        <div>
+                            <h1>Dashboard</h1>
+                            <p class="lead">Welcome back, John! Here's your procurement overview.</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                New RFQ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>$24,580</h3>
+                                <p>Total Spend This Month</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon accent">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>12</h3>
+                                <p>Active RFQ / Tender</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon secondary">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>8</h3>
+                                <p>Pending Quotations</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <i class="fas fa-shipping-fast"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>5</h3>
+                                <p>Current Orders</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity & Quick Actions -->
+                    <div class="content-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                        <!-- Recent Orders -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Orders</h3>
+                                <a href="#orders" class="btn btn-outline btn-sm">View All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Supplier</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-7842</td>
+                                            <td>Global Machinery Inc.</td>
+                                            <td>$8,450</td>
+                                            <td><span class="status-badge status-processing">Processing</span></td>
+                                            <td>12 Nov 2023</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-7839</td>
+                                            <td>SteelWorks Ltd.</td>
+                                            <td>$12,200</td>
+                                            <td><span class="status-badge status-approved">Shipped</span></td>
+                                            <td>10 Nov 2023</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-7831</td>
+                                            <td>TechParts Corp</td>
+                                            <td>$3,850</td>
+                                            <td><span class="status-badge status-approved">Delivered</span></td>
+                                            <td>05 Nov 2023</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Quick Actions</h3>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-plus"></i>
+                                    Create New RFQ
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-search"></i>
+                                    Find Suppliers
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-file-invoice"></i>
+                                    Generate Report
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-users"></i>
+                                    Manage Team
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active RFQs -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Active RFQs / Tenders</h3>
+                            <a href="#rfq" class="btn btn-outline btn-sm">View All</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>RFQ ID</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Deadline</th>
+                                        <th>Bids</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#RFQ-2154</td>
+                                        <td>Industrial Conveyor Belts</td>
+                                        <td>Machinery</td>
+                                        <td>25 Nov 2023</td>
+                                        <td>7</td>
+                                        <td><span class="status-badge status-pending">Open</span></td>
+                                        <td><button class="btn btn-primary btn-sm">View Bids</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#RFQ-2148</td>
+                                        <td>Raw Steel Materials</td>
+                                        <td>Raw Materials</td>
+                                        <td>20 Nov 2023</td>
+                                        <td>12</td>
+                                        <td><span class="status-badge status-pending">Open</span></td>
+                                        <td><button class="btn btn-primary btn-sm">View Bids</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#RFQ-2139</td>
+                                        <td>Safety Equipment Bulk Order</td>
+                                        <td>Safety Tools</td>
+                                        <td>15 Nov 2023</td>
+                                        <td>9</td>
+                                        <td><span class="status-badge status-processing">Under Review</span></td>
+                                        <td><button class="btn btn-outline btn-sm">Review</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Marketplace Section -->
+                <section id="marketplace" class="content-section" style="display: none;">
+                    <div class="page-header">
+                        <div>
+                            <h1>Marketplace</h1>
+                            <p class="lead">Browse products from verified suppliers</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                Add Product
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label>Category</label>
+                            <select class="filter-select">
+                                <option>All Categories</option>
+                                <option>Machinery</option>
+                                <option>Tools</option>
+                                <option>Raw Materials</option>
+                                <option>Safety Equipment</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Price Range</label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="number" class="filter-input" placeholder="Min" style="width: 100px;">
+                                <input type="number" class="filter-input" placeholder="Max" style="width: 100px;">
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <label>Supplier</label>
+                            <select class="filter-select">
+                                <option>All Suppliers</option>
+                                <option>Global Machinery Inc.</option>
+                                <option>SteelWorks Ltd.</option>
+                                <option>TechParts Corp</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Location</label>
+                            <select class="filter-select">
+                                <option>Any Location</option>
+                                <option>North America</option>
+                                <option>Europe</option>
+                                <option>Asia</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>MOQ</label>
+                            <input type="number" class="filter-input" placeholder="Minimum Order">
+                        </div>
+                        <div class="filter-group" style="align-self: flex-end;">
+                            <button class="btn btn-primary">Apply Filters</button>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="products-grid">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Industrial Conveyor Belt</h3>
+                                <p class="product-supplier">Global Machinery Inc.</p>
+                                <div class="product-price">$2,450</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.8rem; color: var(--gray);">MOQ: 10 units</span>
+                                    <button class="btn btn-primary btn-sm">Request Quote</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <i class="fas fa-hammer"></i>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Heavy Duty Drill Machine</h3>
+                                <p class="product-supplier">TechParts Corp</p>
+                                <div class="product-price">$850</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.8rem; color: var(--gray);">MOQ: 5 units</span>
+                                    <button class="btn btn-primary btn-sm">Request Quote</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Steel Sheets (Grade A)</h3>
+                                <p class="product-supplier">SteelWorks Ltd.</p>
+                                <div class="product-price">$120/unit</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.8rem; color: var(--gray);">MOQ: 100 units</span>
+                                    <button class="btn btn-primary btn-sm">Request Quote</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <i class="fas fa-hard-hat"></i>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">Safety Helmets (Bulk)</h3>
+                                <p class="product-supplier">SafeGear Co.</p>
+                                <div class="product-price">$15/unit</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.8rem; color: var(--gray);">MOQ: 50 units</span>
+                                    <button class="btn btn-primary btn-sm">Request Quote</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Categories Section -->
+                <section id="categories" class="content-section" style="display: none;">
+                    <div class="page-header">
+                        <div>
+                            <h1>Product Categories</h1>
+                            <p class="lead">Organized product categories for easy navigation</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                Add Category
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="categories-grid">
+                        <div class="category-card">
+                            <div class="category-image">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <div class="category-info">
+                                <h3 class="category-title">Machinery</h3>
+                                <p class="category-count">245 products</p>
+                                <p>Industrial machinery, equipment, and tools for manufacturing and production.</p>
+                                <button class="btn btn-outline btn-sm" style="margin-top: 1rem;">Browse Products</button>
+                            </div>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-image">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <div class="category-info">
+                                <h3 class="category-title">Tools & Equipment</h3>
+                                <p class="category-count">189 products</p>
+                                <p>Hand tools, power tools, and specialized equipment for various industries.</p>
+                                <button class="btn btn-outline btn-sm" style="margin-top: 1rem;">Browse Products</button>
+                            </div>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-image">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div class="category-info">
+                                <h3 class="category-title">Raw Materials</h3>
+                                <p class="category-count">312 products</p>
+                                <p>Metals, plastics, chemicals, and other raw materials for manufacturing.</p>
+                                <button class="btn btn-outline btn-sm" style="margin-top: 1rem;">Browse Products</button>
+                            </div>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-image">
+                                <i class="fas fa-hard-hat"></i>
+                            </div>
+                            <div class="category-info">
+                                <h3 class="category-title">Safety Equipment</h3>
+                                <p class="category-count">134 products</p>
+                                <p>Personal protective equipment and safety gear for industrial environments.</p>
+                                <button class="btn btn-outline btn-sm" style="margin-top: 1rem;">Browse Products</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Suppliers Directory Section -->
+                <section id="suppliers" class="content-section" style="display: none;">
+                    <div class="page-header">
+                        <div>
+                            <h1>Suppliers Directory</h1>
+                            <p class="lead">Find and connect with verified suppliers</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                Add Supplier
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Supplier Filters -->
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label>Industry</label>
+                            <select class="filter-select">
+                                <option>All Industries</option>
+                                <option>Manufacturing</option>
+                                <option>Construction</option>
+                                <option>Technology</option>
+                                <option>Chemicals</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Location</label>
+                            <select class="filter-select">
+                                <option>Any Location</option>
+                                <option>North America</option>
+                                <option>Europe</option>
+                                <option>Asia</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Certification</label>
+                            <select class="filter-select">
+                                <option>Any Certification</option>
+                                <option>ISO 9001</option>
+                                <option>ISO 14001</option>
+                                <option>OHSAS 18001</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" style="align-self: flex-end;">
+                            <button class="btn btn-primary">Apply Filters</button>
+                        </div>
+                    </div>
+
+                    <div class="suppliers-grid">
+                        <div class="supplier-card">
+                            <div class="supplier-image">
+                                <i class="fas fa-industry"></i>
+                            </div>
+                            <div class="supplier-info">
+                                <h3 class="supplier-title">Global Machinery Inc.</h3>
+                                <p class="supplier-location">United States</p>
+                                <p>Leading manufacturer of industrial machinery with 25+ years of experience.</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                    <span class="status-badge status-approved">Verified</span>
+                                    <button class="btn btn-primary btn-sm">View Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="supplier-card">
+                            <div class="supplier-image">
+                                <i class="fas fa-hammer"></i>
+                            </div>
+                            <div class="supplier-info">
+                                <h3 class="supplier-title">TechParts Corp</h3>
+                                <p class="supplier-location">Germany</p>
+                                <p>Specialized in precision tools and equipment for the manufacturing industry.</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                    <span class="status-badge status-approved">Verified</span>
+                                    <button class="btn btn-primary btn-sm">View Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="supplier-card">
+                            <div class="supplier-image">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div class="supplier-info">
+                                <h3 class="supplier-title">SteelWorks Ltd.</h3>
+                                <p class="supplier-location">China</p>
+                                <p>Supplier of high-quality steel and metal products for industrial use.</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                    <span class="status-badge status-approved">Verified</span>
+                                    <button class="btn btn-primary btn-sm">View Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="supplier-card">
+                            <div class="supplier-image">
+                                <i class="fas fa-hard-hat"></i>
+                            </div>
+                            <div class="supplier-info">
+                                <h3 class="supplier-title">SafeGear Co.</h3>
+                                <p class="supplier-location">United Kingdom</p>
+                                <p>Manufacturer of safety equipment and personal protective gear.</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                    <span class="status-badge status-pending">Pending Review</span>
+                                    <button class="btn btn-outline btn-sm">View Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- RFQ / Tender Section -->
+                <section id="rfq" class="content-section" style="display: none;">
+                    <div class="page-header">
+                        <div>
+                            <h1>RFQ / Tender Management</h1>
+                            <p class="lead">Create and manage your Requests for Quotation</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                New RFQ
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <div class="tab active" data-tab="active-rfqs">Active RFQs</div>
+                        <div class="tab" data-tab="draft-rfqs">Drafts</div>
+                        <div class="tab" data-tab="closed-rfqs">Closed</div>
+                    </div>
+
+                    <div class="tab-content active" id="active-rfqs">
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Active Requests for Quotation</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>RFQ ID</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Deadline</th>
+                                            <th>Bids Received</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#RFQ-2154</td>
+                                            <td>Industrial Conveyor Belts</td>
+                                            <td>Machinery</td>
+                                            <td>25 Nov 2023</td>
+                                            <td>7</td>
+                                            <td><span class="status-badge status-pending">Open</span></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm">View Bids</button>
+                                                <button class="btn btn-outline btn-sm">Edit</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#RFQ-2148</td>
+                                            <td>Raw Steel Materials</td>
+                                            <td>Raw Materials</td>
+                                            <td>20 Nov 2023</td>
+                                            <td>12</td>
+                                            <td><span class="status-badge status-pending">Open</span></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm">View Bids</button>
+                                                <button class="btn btn-outline btn-sm">Edit</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#RFQ-2142</td>
+                                            <td>Safety Equipment Bulk Order</td>
+                                            <td>Safety Tools</td>
+                                            <td>18 Nov 2023</td>
+                                            <td>9</td>
+                                            <td><span class="status-badge status-processing">Under Review</span></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm">Review Bids</button>
+                                                <button class="btn btn-outline btn-sm">Extend</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="draft-rfqs">
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Draft RFQs</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>RFQ ID</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Last Modified</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#RFQ-D2157</td>
+                                            <td>CNC Machine Parts</td>
+                                            <td>Machinery</td>
+                                            <td>14 Nov 2023</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm">Continue</button>
+                                                <button class="btn btn-outline btn-sm">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#RFQ-D2153</td>
+                                            <td>Industrial Pumps</td>
+                                            <td>Equipment</td>
+                                            <td>10 Nov 2023</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm">Continue</button>
+                                                <button class="btn btn-outline btn-sm">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="closed-rfqs">
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Closed RFQs</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>RFQ ID</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Closed Date</th>
+                                            <th>Winner</th>
+                                            <th>Final Value</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#RFQ-2135</td>
+                                            <td>Office Furniture</td>
+                                            <td>Furniture</td>
+                                            <td>05 Nov 2023</td>
+                                            <td>OfficeSupplies Inc.</td>
+                                            <td>$12,500</td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">View Details</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#RFQ-2128</td>
+                                            <td>IT Equipment</td>
+                                            <td>Technology</td>
+                                            <td>28 Oct 2023</td>
+                                            <td>TechSolutions Ltd.</td>
+                                            <td>$8,750</td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">View Details</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Orders / Transactions Section -->
+                <section id="orders" class="content-section" style="display: none;">
+                    <div class="page-header">
+                        <div>
+                            <h1>Orders & Transactions</h1>
+                            <p class="lead">Manage your purchase orders and track transactions</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                New Order
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <div class="tab active" data-tab="all-orders">All Orders</div>
+                        <div class="tab" data-tab="pending-orders">Pending</div>
+                        <div class="tab" data-tab="shipped-orders">Shipped</div>
+                        <div class="tab" data-tab="delivered-orders">Delivered</div>
+                    </div>
+
+                    <div class="tab-content active" id="all-orders">
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Order History</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Supplier</th>
+                                            <th>Products</th>
+                                            <th>Amount</th>
+                                            <th>Order Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-7842</td>
+                                            <td>Global Machinery Inc.</td>
+                                            <td>Conveyor Belt System</td>
+                                            <td>$8,450</td>
+                                            <td>12 Nov 2023</td>
+                                            <td><span class="status-badge status-processing">Processing</span></td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">Track</button>
+                                                <button class="btn btn-outline btn-sm">Invoice</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-7839</td>
+                                            <td>SteelWorks Ltd.</td>
+                                            <td>Steel Sheets (100 units)</td>
+                                            <td>$12,200</td>
+                                            <td>10 Nov 2023</td>
+                                            <td><span class="status-badge status-approved">Shipped</span></td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">Track</button>
+                                                <button class="btn btn-outline btn-sm">Invoice</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-7831</td>
+                                            <td>TechParts Corp</td>
+                                            <td>Heavy Duty Drills (5 units)</td>
+                                            <td>$3,850</td>
+                                            <td>05 Nov 2023</td>
+                                            <td><span class="status-badge status-approved">Delivered</span></td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">Invoice</button>
+                                                <button class="btn btn-outline btn-sm">Review</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-7825</td>
+                                            <td>SafeGear Co.</td>
+                                            <td>Safety Helmets (50 units)</td>
+                                            <td>$750</td>
+                                            <td>01 Nov 2023</td>
+                                            <td><span class="status-badge status-approved">Delivered</span></td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">Invoice</button>
+                                                <button class="btn btn-outline btn-sm">Review</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="pending-orders">
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Pending Orders</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Supplier</th>
+                                            <th>Products</th>
+                                            <th>Amount</th>
+                                            <th>Order Date</th>
+                                            <th>Expected Delivery</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-7842</td>
+                                            <td>Global Machinery Inc.</td>
+                                            <td>Conveyor Belt System</td>
+                                            <td>$8,450</td>
+                                            <td>12 Nov 2023</td>
+                                            <td>25 Nov 2023</td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">Track</button>
+                                                <button class="btn btn-outline btn-sm">Contact Supplier</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="shipped-orders">
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Shipped Orders</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Supplier</th>
+                                            <th>Products</th>
+                                            <th>Amount</th>
+                                            <th>Shipped Date</th>
+                                            <th>Tracking Number</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-7839</td>
+                                            <td>SteelWorks Ltd.</td>
+                                            <td>Steel Sheets (100 units)</td>
+                                            <td>$12,200</td>
+                                            <td>14 Nov 2023</td>
+                                            <td>TRK-784512</td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">Track</button>
+                                                <button class="btn btn-outline btn-sm">Contact Supplier</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="delivered-orders">
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Delivered Orders</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Supplier</th>
+                                            <th>Products</th>
+                                            <th>Amount</th>
+                                            <th>Delivered Date</th>
+                                            <th>Rating</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-7831</td>
+                                            <td>TechParts Corp</td>
+                                            <td>Heavy Duty Drills (5 units)</td>
+                                            <td>$3,850</td>
+                                            <td>12 Nov 2023</td>
+                                            <td>★★★★★</td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">Invoice</button>
+                                                <button class="btn btn-outline btn-sm">Reorder</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-7825</td>
+                                            <td>SafeGear Co.</td>
+                                            <td>Safety Helmets (50 units)</td>
+                                            <td>$750</td>
+                                            <td>08 Nov 2023</td>
+                                            <td>★★★★☆</td>
+                                            <td>
+                                                <button class="btn btn-outline btn-sm">Invoice</button>
+                                                <button class="btn btn-outline btn-sm">Reorder</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Help / Support Section -->
+                <section id="support" class="content-section" style="display: none;">
+                    <div class="page-header">
+                        <div>
+                            <h1>Help & Support</h1>
+                            <p class="lead">Get assistance and find answers to common questions</p>
+                        </div>
+                    </div>
+
+                    <div class="content-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                        <!-- FAQ -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Frequently Asked Questions</h3>
+                            </div>
+                            <div class="faq-list">
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        How do I create a new RFQ?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>To create a new RFQ, navigate to the RFQ/Tender section and click the "New RFQ" button. Fill in the required details including product specifications, quantity, delivery requirements, and deadline. You can then publish the RFQ to make it visible to suppliers.</p>
+                                    </div>
+                                </div>
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        How can I track my orders?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>You can track your orders in the Orders/Transactions section. Click on the "Track" button next to any shipped order to view real-time tracking information. You'll need the tracking number provided by the supplier.</p>
+                                    </div>
+                                </div>
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        What payment methods are accepted?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>We accept various payment methods including credit cards, bank transfers, and digital payment platforms. Payment options may vary by supplier. You can manage your payment methods in the Profile/Settings section.</p>
+                                    </div>
+                                </div>
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        How do I add team members to my account?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>To add team members, go to Profile/Settings and select "Team Management". From there, you can invite new team members by email and assign them appropriate permissions and roles within your organization.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Support -->
+                        <div class="content-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Contact Support</h3>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                <div>
+                                    <h4 style="margin-bottom: 0.5rem;">Email Support</h4>
+                                    <p style="margin: 0;">support@procurehub.com</p>
+                                    <p style="margin: 0; font-size: 0.9rem; color: var(--gray);">Typically responds within 2 hours</p>
+                                </div>
+                                <div>
+                                    <h4 style="margin-bottom: 0.5rem;">Phone Support</h4>
+                                    <p style="margin: 0;">+1 (800) 123-4567</p>
+                                    <p style="margin: 0; font-size: 0.9rem; color: var(--gray);">Mon-Fri, 9AM-6PM EST</p>
+                                </div>
+                                <div>
+                                    <h4 style="margin-bottom: 0.5rem;">Live Chat</h4>
+                                    <p style="margin: 0;">Available 24/7</p>
+                                    <p style="margin: 0; font-size: 0.9rem; color: var(--gray);">Click the chat icon in the bottom right</p>
+                                </div>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-envelope"></i>
+                                    Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        // Sidebar Navigation
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.sidebar-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Hide all content sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Show the target section
+                const targetId = this.getAttribute('href').substring(1);
+                document.getElementById(targetId).style.display = 'block';
+            });
+        });
+
+        // Dropdown functionality
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        });
+
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabContainer = this.closest('.tabs');
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remove active class from all tabs in this container
+                tabContainer.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all tab contents in this container
+                const tabContents = tabContainer.parentElement.querySelectorAll('.tab-content');
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show the target tab content
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // FAQ functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const faqItem = this.parentElement;
+                faqItem.classList.toggle('active');
+            });
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar');
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (window.innerWidth <= 992 && 
+                !sidebar.contains(e.target) && 
+                !mobileBtn.contains(e.target) && 
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                mobileBtn.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
